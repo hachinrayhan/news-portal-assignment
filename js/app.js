@@ -54,7 +54,7 @@ const displayNews = news => {
                                     <i class="fa-regular fa-eye me-2"></i>
                                     <span>${singleNews.total_view}</span>
                                 </div>
-                                <button onclick="loadDetailNews('${singleNews._id}')"><i class="fa-solid fa-arrow-right-long"></i></button>
+                                <button data-bs-toggle="modal" data-bs-target="#newsDetailModal" onclick="loadDetailNews('${singleNews._id}')"><i class="fa-solid fa-arrow-right-long"></i></button>
                             </div>
                         </div>
                     </div>
@@ -85,7 +85,15 @@ const loadDetailNews = newsId => {
 }
 
 const displayDetailNews = detailNews => {
-    console.log(detailNews);
+    console.log(detailNews.title);
+    const title = document.getElementById('newsDetailModalLabel');
+    title.innerText = detailNews.title;
+    const modalBody = document.getElementById('modal-body');
+    modalBody.innerHTML = `
+        <p>${detailNews.details}</p>
+        <p>By: ${detailNews.author.name}</p>
+        <p>Published Date: ${detailNews.author.published_date}</p>
+    `;
 }
 
 loadCategories();
