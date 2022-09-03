@@ -16,14 +16,15 @@ const displayCategories = categories => {
 }
 
 const loadNews = catId => {
-    console.log(catId);
     fetch(`https://openapi.programming-hero.com/api/news/category/${catId}`)
         .then(res => res.json())
         .then(data => displayNews(data.data))
 }
 
 const displayNews = news => {
-    console.log(news);
+    const newsNumber = news.length;
+    const noOfNewsElement = document.getElementById('news-number');
+    noOfNewsElement.innerText = `${newsNumber} items found in this category.`;
     const newsSection = document.getElementById('news-section');
     newsSection.innerHTML = '';
     news.forEach(singleNews => {
