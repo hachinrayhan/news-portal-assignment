@@ -1,0 +1,4 @@
+#category-ul li:hover {
+    background-color: yellow;
+    cursor: pointer;
+}
