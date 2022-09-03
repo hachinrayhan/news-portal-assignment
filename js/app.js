@@ -16,7 +16,7 @@ const displayCategories = categories => {
 }
 
 const loadNews = catId => {
-    toggleSpinner(true);
+    toggleSpinner(true); //start spinner
     fetch(`https://openapi.programming-hero.com/api/news/category/${catId}`)
         .then(res => res.json())
         .then(data => displayNews(data.data))
@@ -29,7 +29,6 @@ const displayNews = news => {
     const newsSection = document.getElementById('news-section');
     newsSection.innerHTML = '';
     news.forEach(singleNews => {
-        console.log(singleNews);
         const singleNewsDiv = document.createElement('div');
         singleNewsDiv.classList.add('col');
         singleNewsDiv.innerHTML = `
@@ -50,9 +49,12 @@ const displayNews = news => {
                                     <p class="m-0">${singleNews.author.published_date}</p>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center">
-                                <i class="fa-regular fa-eye me-2"></i>
-                                <span>${singleNews.total_view}</span>
+                            <div>
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-regular fa-eye me-2"></i>
+                                    <span>${singleNews.total_view}</span>
+                                </div>
+                                <button onclick="loadDetailNews('${singleNews._id}')"><i class="fa-solid fa-arrow-right-long"></i></button>
                             </div>
                         </div>
                     </div>
@@ -62,7 +64,7 @@ const displayNews = news => {
         `;
         newsSection.appendChild(singleNewsDiv);
     })
-    toggleSpinner(false);
+    toggleSpinner(false); //stop spinner
 }
 
 /* spinner function */
@@ -74,6 +76,16 @@ const toggleSpinner = isLoading => {
     else {
         spinner.classList.add('d-none');
     }
+}
+
+const loadDetailNews = newsId => {
+    fetch(`https://openapi.programming-hero.com/api/news/${newsId}`)
+        .then(res => res.json())
+        .then(data => displayDetailNews(data.data[0]))
+}
+
+const displayDetailNews = detailNews => {
+    console.log(detailNews);
 }
 
 loadCategories();
