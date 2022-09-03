@@ -16,6 +16,7 @@ const displayCategories = categories => {
 }
 
 const loadNews = catId => {
+    toggleSpinner(true);
     fetch(`https://openapi.programming-hero.com/api/news/category/${catId}`)
         .then(res => res.json())
         .then(data => displayNews(data.data))
@@ -61,6 +62,18 @@ const displayNews = news => {
         `;
         newsSection.appendChild(singleNewsDiv);
     })
+    toggleSpinner(false);
+}
+
+/* spinner function */
+const toggleSpinner = isLoading => {
+    const spinner = document.getElementById('spinner');
+    if (isLoading) {
+        spinner.classList.remove('d-none');
+    }
+    else {
+        spinner.classList.add('d-none');
+    }
 }
 
 loadCategories();
