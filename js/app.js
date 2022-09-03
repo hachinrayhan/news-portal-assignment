@@ -1,7 +1,12 @@
 const loadCategories = () => {
-    fetch('https://openapi.programming-hero.com/api/news/categories')
-        .then(res => res.json())
-        .then(data => displayCategories(data.data.news_category))
+    try {
+        fetch('https://openapi.programming-hero.com/api/news/categories')
+            .then(res => res.json())
+            .then(data => displayCategories(data.data.news_category))
+    }
+    catch (error) {
+        alert(error);
+    }
 }
 
 const displayCategories = categories => {
@@ -9,23 +14,23 @@ const displayCategories = categories => {
     categories.forEach(category => {
         const categoryItem = document.createElement('li');
         categoryItem.classList.add('list-group-item', 'border-0');
-        categoryItem.setAttribute('onclick', `loadNews('${category.category_id}')`)
+        categoryItem.setAttribute('onclick', `loadNews('${category.category_id}', '${category.category_name}')`)
         categoryItem.innerText = category.category_name;
         categoryUl.appendChild(categoryItem);
     })
 }
 
-const loadNews = catId => {
+const loadNews = (catId, catName) => {
     toggleSpinner(true); //start spinner
     fetch(`https://openapi.programming-hero.com/api/news/category/${catId}`)
         .then(res => res.json())
-        .then(data => displayNews(data.data))
+        .then(data => displayNews(data.data, catName))
 }
 
-const displayNews = news => {
+const displayNews = (news, catName) => {
     const newsNumber = news.length;
     const noOfNewsElement = document.getElementById('news-number');
-    noOfNewsElement.innerText = `${newsNumber} items found in this category.`;
+    noOfNewsElement.innerText = `${newsNumber} items found in the category of ${catName}.`;
     const newsSection = document.getElementById('news-section');
     newsSection.innerHTML = '';
     news.forEach(singleNews => {
@@ -90,10 +95,12 @@ const displayDetailNews = detailNews => {
     title.innerText = detailNews.title;
     const modalBody = document.getElementById('modal-body');
     modalBody.innerHTML = `
-        <p>${detailNews.details}</p>
+        <img class="img-fluid" src="${detailNews.image_url}" alt="">
         <p>By: ${detailNews.author.name}</p>
         <p>Published Date: ${detailNews.author.published_date}</p>
+        <p>${detailNews.details}</p>
     `;
 }
 
 loadCategories();
+loadNews('01', 'Breaking News');
