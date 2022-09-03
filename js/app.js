@@ -22,9 +22,14 @@ const displayCategories = categories => {
 
 const loadNews = (catId, catName) => {
     toggleSpinner(true); //start spinner
-    fetch(`https://openapi.programming-hero.com/api/news/category/${catId}`)
-        .then(res => res.json())
-        .then(data => displayNews(data.data, catName))
+    try {
+        fetch(`https://openapi.programming-hero.com/api/news/category/${catId}`)
+            .then(res => res.json())
+            .then(data => displayNews(data.data, catName))
+    }
+    catch (error) {
+        alert(error);
+    }
 }
 
 const displayNews = (news, catName) => {
@@ -84,19 +89,24 @@ const toggleSpinner = isLoading => {
 }
 
 const loadDetailNews = newsId => {
-    fetch(`https://openapi.programming-hero.com/api/news/${newsId}`)
-        .then(res => res.json())
-        .then(data => displayDetailNews(data.data[0]))
+    try {
+        fetch(`https://openapi.programming-hero.com/api/news/${newsId}`)
+            .then(res => res.json())
+            .then(data => displayDetailNews(data.data[0]))
+    }
+    catch (error) {
+        alert(error);
+    }
 }
 
 const displayDetailNews = detailNews => {
-    console.log(detailNews.title);
     const title = document.getElementById('newsDetailModalLabel');
     title.innerText = detailNews.title;
     const modalBody = document.getElementById('modal-body');
     modalBody.innerHTML = `
         <img class="img-fluid" src="${detailNews.image_url}" alt="">
-        <p>By: ${detailNews.author.name}</p>
+        <p>By: ${detailNews.author.name ? detailNews.author.name : 'no data found'}</p>
+        <p>Views: ${detailNews.total_view ? detailNews.total_view : 'no data found'}
         <p>Published Date: ${detailNews.author.published_date}</p>
         <p>${detailNews.details}</p>
     `;
