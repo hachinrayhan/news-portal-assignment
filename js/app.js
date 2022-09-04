@@ -33,6 +33,9 @@ const loadNews = (catId, catName) => {
 }
 
 const displayNews = (news, catName) => {
+    news.sort((a, b) => {
+        return b.total_view - a.total_view;
+    })
     const newsNumber = news.length;
     const noOfNewsElement = document.getElementById('news-number');
     noOfNewsElement.innerText = `${newsNumber} items found in the category of ${catName}.`;
@@ -111,6 +114,7 @@ const displayDetailNews = detailNews => {
         <p>${detailNews.details}</p>
     `;
 }
+
 
 loadCategories();
 loadNews('01', 'Breaking News');
